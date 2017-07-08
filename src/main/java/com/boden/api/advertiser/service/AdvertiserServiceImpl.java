@@ -34,8 +34,7 @@ public class AdvertiserServiceImpl implements AdvertiserService {
 
 	@Override
 	public void deleteAdvertiser(String advertiserId) {
-		// TODO Auto-generated method stub
-		
+		advertiserMapper.deleteAdvertiser(advertiserId);
 	}
 	
 }

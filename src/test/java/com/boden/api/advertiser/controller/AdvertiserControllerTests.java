@@ -15,6 +15,7 @@ import com.boden.api.advertiser.TestConfig;
 import com.boden.api.advertiser.config.DataConfig;
 import com.boden.api.advertiser.exception.NotFoundException;
 import com.boden.api.advertiser.model.Advertiser;
+import com.boden.api.advertiser.service.AdvertiserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={DataConfig.class, TestConfig.class})
@@ -26,6 +27,9 @@ public class AdvertiserControllerTests {
 	
 	@Autowired
 	AdvertiserController advertiserController;
+	
+	@Autowired
+	AdvertiserService advertiserService;
 	
 	@Test
 	public void getAdvertiser_shouldReturnDataFromDatabase_whenMatchingRecordExists() throws NotFoundException {
@@ -61,18 +65,33 @@ public class AdvertiserControllerTests {
 	@Test 
 	public void updateAdvertiser_shouldSuccessfullyUpdateAdvertiser() throws NotFoundException {
 		// Make sure data is initially different
-		Advertiser advertiserFromDB = advertiserController.getAdvertiserById("12345678-1234-1234-1234-123456789ABC");
+		Advertiser advertiserFromDB = advertiserService.retrieveAdvertiserById("12345678-1234-1234-1234-123456789ABC");
 		assertFalse(MOCKED_NAME.equals(advertiserFromDB.getName()));
 		assertFalse(MOCKED_CONTACT_NAME.equals(advertiserFromDB.getContactName()));
 		assertFalse(MOCKED_CREDIT_LIMIT.equals(advertiserFromDB.getCreditLimit()));
 		
 		advertiserController.updateAdvertiser("12345678-1234-1234-1234-123456789ABC", mockAdvertiser());
 		
-		advertiserFromDB = advertiserController.getAdvertiserById("12345678-1234-1234-1234-123456789ABC");
+		advertiserFromDB = advertiserService.retrieveAdvertiserById("12345678-1234-1234-1234-123456789ABC");
 		
 		assertEquals("advertiser name should match", MOCKED_NAME, advertiserFromDB.getName());
 		assertEquals("advertiser contact name should match", MOCKED_CONTACT_NAME, advertiserFromDB.getContactName());
 		assertEquals("advertiser credit limit should match", MOCKED_CREDIT_LIMIT, advertiserFromDB.getCreditLimit());
+	}
+	
+	@Test
+	public void deleteAdvertiser_shouldSuccessfullyDeleteAdvertiser() throws NotFoundException {
+		// create record to delete
+		Advertiser advertiser = advertiserService.createAdvertiser(mockAdvertiser());
+		String advertiserId = advertiser.getId();
+		
+		// Make sure that it is in the DB
+		assertNotNull(advertiserService.retrieveAdvertiserById(advertiserId));
+		
+		advertiserController.deleteAdvertiser(advertiserId);
+		
+		// Make sure that it is not in the DB after delete
+		assertNull(advertiserService.retrieveAdvertiserById(advertiserId));
 	}
 	
 	private Advertiser mockAdvertiser() {
