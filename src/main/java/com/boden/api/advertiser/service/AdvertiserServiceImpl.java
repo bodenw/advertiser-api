@@ -1,5 +1,7 @@
 package com.boden.api.advertiser.service;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +16,9 @@ public class AdvertiserServiceImpl implements AdvertiserService {
 	
 	@Override
 	public Advertiser createAdvertiser(Advertiser advertiser) {
-		// TODO Auto-generated method stub
-		return null;
+		advertiser.setId(UUID.randomUUID().toString());
+		advertiserMapper.createAdvertiser(advertiser);
+		return advertiser;
 	}
 
 	@Override

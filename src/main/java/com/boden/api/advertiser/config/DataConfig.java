@@ -26,14 +26,13 @@ public class DataConfig {
 	public DataSource dataSource() {
 		// Build DataSource
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-	    EmbeddedDatabase dataSource = builder
-	        .setType(EmbeddedDatabaseType.H2)
-	        .build();
+		EmbeddedDatabase dataSource = builder
+				.setType(EmbeddedDatabaseType.H2).build();
 	    
         // create a table and populate some data
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         logger.info("Creating table");
-        jdbcTemplate.execute("drop table advertisers if exists");
+        jdbcTemplate.execute("drop table advertiser if exists");
         jdbcTemplate.execute("create table advertiser(id char(36), name varchar(50), contactName varchar(100), creditLimit int)");
         jdbcTemplate.update("insert into advertiser(id, name, contactName, creditLimit) values (?,?,?,?)", 
         		"12345678-1234-1234-1234-123456789ABC", "Testing", "Test User", 1000);

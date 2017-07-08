@@ -1,17 +1,23 @@
 package com.boden.api.advertiser.controller;
 
+import java.net.URI;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.boden.api.advertiser.exception.NotFoundException;
 import com.boden.api.advertiser.model.Advertiser;
 import com.boden.api.advertiser.service.AdvertiserService;
 
@@ -25,9 +31,25 @@ public class AdvertiserController {
 	private AdvertiserService advertiserService;
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public @ResponseBody Advertiser getAdvertiserById(@RequestParam(required = true, value="id") String advertiserId) {
+	public @ResponseBody Advertiser getAdvertiserById(@RequestParam(required = true, value="id") String advertiserId) throws NotFoundException {
 		Advertiser advertiser = advertiserService.retrieveAdvertiserById(advertiserId);
+		if (advertiser == null) {
+			throw new NotFoundException("advertiser with id " + advertiserId + " was not found");
+		}
 		return advertiser;
+	}
+	
+	@RequestMapping(method=RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Advertiser createAdvertiser(@RequestBody Advertiser advertiser) {
+		Advertiser result = advertiserService.createAdvertiser(advertiser);
+		return result;
+	}
+	
+	@ExceptionHandler(NotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public void handleNotFoundExceptions(NotFoundException e) {
+		logger.warn(e.getMessage());
 	}
 	
 	@ExceptionHandler(Throwable.class)

@@ -16,7 +16,7 @@ public interface AdvertiserMapper {
         @Result(property = "contactName", column = "contactName"),
         @Result(property = "creditLimit", column = "creditLimit")
       })
-	@Insert("INSERT INTO advertisers(id,name,contactName,creditLimit) values(#{id},#{name},#{contactName},#{creditLimit}")
+	@Insert("INSERT INTO advertiser(id,name,contactName,creditLimit) values(#{id},#{name},#{contactName},#{creditLimit})")
 	void createAdvertiser(Advertiser advertiser);
 	
 	@Select("SELECT id, name, contactName, creditLimit from advertiser WHERE id=#{id}")
