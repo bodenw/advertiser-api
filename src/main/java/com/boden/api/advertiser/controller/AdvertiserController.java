@@ -28,10 +28,10 @@ public class AdvertiserController {
 	private AdvertiserService advertiserService;
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public @ResponseBody Advertiser getAdvertiserById(@RequestParam(required = true, value="id") String advertiserId) throws NotFoundException {
-		Advertiser advertiser = advertiserService.retrieveAdvertiserById(advertiserId);
+	public @ResponseBody Advertiser getAdvertiserById(@RequestParam(required = true, value="id") String id) throws NotFoundException {
+		Advertiser advertiser = advertiserService.retrieveAdvertiserById(id);
 		if (advertiser == null) {
-			throw new NotFoundException("advertiser with id " + advertiserId + " was not found");
+			throw new NotFoundException("advertiser with id " + id + " was not found");
 		}
 		return advertiser;
 	}
@@ -45,7 +45,10 @@ public class AdvertiserController {
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Advertiser updateAdvertiser(@PathVariable String id, @RequestBody Advertiser advertiser) {
+	public @ResponseBody Advertiser updateAdvertiser(@PathVariable String id, @RequestBody Advertiser advertiser) throws NotFoundException {
+		if (advertiserService.retrieveAdvertiserById(id) == null) {
+			throw new NotFoundException("advertiser with id " + id + " was not found");
+		}
 		advertiser.setId(id);
 		advertiser = advertiserService.updateAdvertiser(advertiser);
 		return advertiser;
@@ -53,7 +56,10 @@ public class AdvertiserController {
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteAdvertiser(@PathVariable String id) {
+	public void deleteAdvertiser(@PathVariable String id) throws NotFoundException {
+		if (advertiserService.retrieveAdvertiserById(id) == null) {
+			throw new NotFoundException("advertiser with id " + id + " was not found");
+		}
 		advertiserService.deleteAdvertiser(id);
 	}
 	

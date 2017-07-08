@@ -79,6 +79,11 @@ public class AdvertiserControllerTests {
 		assertEquals("advertiser credit limit should match", MOCKED_CREDIT_LIMIT, advertiserFromDB.getCreditLimit());
 	}
 	
+	@Test(expected=NotFoundException.class)
+	public void updateAdvertiser_shouldThrowNotFoundException_whenTryingToUpdateRecordThatDoesNotExist() throws NotFoundException {
+		advertiserController.updateAdvertiser("fake_id", mockAdvertiser());
+	}
+	
 	@Test
 	public void deleteAdvertiser_shouldSuccessfullyDeleteAdvertiser() throws NotFoundException {
 		// create record to delete
@@ -92,6 +97,11 @@ public class AdvertiserControllerTests {
 		
 		// Make sure that it is not in the DB after delete
 		assertNull(advertiserService.retrieveAdvertiserById(advertiserId));
+	}
+	
+	@Test(expected=NotFoundException.class)
+	public void deleteAdvertiser_shouldThrowNotFoundException_whenTryingToDeleteRecordThatDoesNotExist() throws NotFoundException {
+		advertiserController.deleteAdvertiser("fake_id");
 	}
 	
 	private Advertiser mockAdvertiser() {
