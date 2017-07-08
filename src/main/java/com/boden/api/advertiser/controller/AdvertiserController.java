@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,6 +46,15 @@ public class AdvertiserController {
 		Advertiser result = advertiserService.createAdvertiser(advertiser);
 		return result;
 	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Advertiser updateAdvertiser(@PathVariable String id, @RequestBody Advertiser advertiser) {
+		advertiser.setId(id);
+		advertiser = advertiserService.updateAdvertiser(advertiser);
+		return advertiser;
+	}
+	
 	
 	@ExceptionHandler(NotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)

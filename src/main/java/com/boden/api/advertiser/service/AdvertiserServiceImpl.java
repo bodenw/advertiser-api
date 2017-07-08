@@ -28,8 +28,8 @@ public class AdvertiserServiceImpl implements AdvertiserService {
 
 	@Override
 	public Advertiser updateAdvertiser(Advertiser advertiser) {
-		// TODO Auto-generated method stub
-		return null;
+		advertiserMapper.updateAdvertiser(advertiser);
+		return advertiser;
 	}
 
 	@Override

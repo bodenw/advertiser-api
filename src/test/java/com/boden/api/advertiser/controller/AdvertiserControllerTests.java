@@ -1,12 +1,13 @@
 package com.boden.api.advertiser.controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -22,7 +23,6 @@ public class AdvertiserControllerTests {
 	private static final String MOCKED_NAME = "MOCKED_NAME";
 	private static final String MOCKED_CONTACT_NAME = "MOCKED_CONTACT_NAME";
 	private static final Integer MOCKED_CREDIT_LIMIT = new Integer(10000);
-	
 	
 	@Autowired
 	AdvertiserController advertiserController;
@@ -52,6 +52,23 @@ public class AdvertiserControllerTests {
 		String advertiserId = advertiser.getId();
 		
 		Advertiser advertiserFromDB = advertiserController.getAdvertiserById(advertiserId);
+		
+		assertEquals("advertiser name should match", MOCKED_NAME, advertiserFromDB.getName());
+		assertEquals("advertiser contact name should match", MOCKED_CONTACT_NAME, advertiserFromDB.getContactName());
+		assertEquals("advertiser credit limit should match", MOCKED_CREDIT_LIMIT, advertiserFromDB.getCreditLimit());
+	}
+	
+	@Test 
+	public void updateAdvertiser_shouldSuccessfullyUpdateAdvertiser() throws NotFoundException {
+		// Make sure data is initially different
+		Advertiser advertiserFromDB = advertiserController.getAdvertiserById("12345678-1234-1234-1234-123456789ABC");
+		assertFalse(MOCKED_NAME.equals(advertiserFromDB.getName()));
+		assertFalse(MOCKED_CONTACT_NAME.equals(advertiserFromDB.getContactName()));
+		assertFalse(MOCKED_CREDIT_LIMIT.equals(advertiserFromDB.getCreditLimit()));
+		
+		advertiserController.updateAdvertiser("12345678-1234-1234-1234-123456789ABC", mockAdvertiser());
+		
+		advertiserFromDB = advertiserController.getAdvertiserById("12345678-1234-1234-1234-123456789ABC");
 		
 		assertEquals("advertiser name should match", MOCKED_NAME, advertiserFromDB.getName());
 		assertEquals("advertiser contact name should match", MOCKED_CONTACT_NAME, advertiserFromDB.getContactName());
