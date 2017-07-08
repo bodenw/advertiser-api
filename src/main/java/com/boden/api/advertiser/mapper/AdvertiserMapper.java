@@ -1,5 +1,7 @@
 package com.boden.api.advertiser.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Result;
@@ -27,5 +29,8 @@ public interface AdvertiserMapper {
 	
 	@Delete("DELETE FROM advertiser WHERE id=#{id}")
 	void deleteAdvertiser(String id);
+	
+	@Select("SELECT id, name, contactName, creditLimit from advertiser")
+	List<Advertiser> retrieveAllAdvertisers();
 	
 }

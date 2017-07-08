@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,13 @@ public class AdvertiserControllerTests {
 	
 	@Autowired
 	AdvertiserService advertiserService;
+	
+	@Test
+	public void getAllAdvertisers_shouldReturnRecordsFromDB() {
+		List<Advertiser> advertisers = advertiserController.getAllAdvertisers();
+		assertNotNull(advertisers);
+		assertFalse(advertisers.isEmpty());
+	}
 	
 	@Test
 	public void getAdvertiser_shouldReturnDataFromDatabase_whenMatchingRecordExists() throws NotFoundException {

@@ -1,5 +1,7 @@
 package com.boden.api.advertiser.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ import com.boden.api.advertiser.model.Advertiser;
 import com.boden.api.advertiser.service.AdvertiserService;
 
 @RestController
-@RequestMapping("/api/advertiser")
+@RequestMapping("/api/advertisers")
 public class AdvertiserController {
 
 	private final Logger logger = LoggerFactory.getLogger(AdvertiserController.class);
@@ -28,7 +29,12 @@ public class AdvertiserController {
 	private AdvertiserService advertiserService;
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public @ResponseBody Advertiser getAdvertiserById(@RequestParam(required = true, value="id") String id) throws NotFoundException {
+	public @ResponseBody List<Advertiser> getAllAdvertisers() {
+		return advertiserService.retrieveAllAdvertisers();
+	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.GET)
+	public @ResponseBody Advertiser getAdvertiserById(@PathVariable String id) throws NotFoundException {
 		Advertiser advertiser = advertiserService.retrieveAdvertiserById(id);
 		if (advertiser == null) {
 			throw new NotFoundException("advertiser with id " + id + " was not found");
