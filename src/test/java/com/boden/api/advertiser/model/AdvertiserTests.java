@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.boden.api.advertiser.model.Advertiser;
+
 public class AdvertiserTests {
 	
 	public static final String MOCK_ADVERTISER_ID = "12345678-1234-1234-1234-123456789ABC";

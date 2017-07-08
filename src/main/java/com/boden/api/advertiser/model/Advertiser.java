@@ -1,6 +1,10 @@
 package com.boden.api.advertiser.model;
 
-public class Advertiser {
+import java.io.Serializable;
+
+public class Advertiser implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private String id;
 	private String name;
 	private String contactName;
