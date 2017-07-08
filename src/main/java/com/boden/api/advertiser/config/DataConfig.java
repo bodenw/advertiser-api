@@ -36,6 +36,8 @@ public class DataConfig {
         jdbcTemplate.execute("create table advertiser(id char(36), name varchar(50), contactName varchar(100), creditLimit int)");
         jdbcTemplate.update("insert into advertiser(id, name, contactName, creditLimit) values (?,?,?,?)", 
         		"12345678-1234-1234-1234-123456789ABC", "Testing", "Test User", 1000);
+        jdbcTemplate.update("insert into advertiser(id, name, contactName, creditLimit) values (?,?,?,?)", 
+        		"12341234-1234-1234-1234-123412341234", "Dont change", "dont change", 1000);
 
         return dataSource;
 	}

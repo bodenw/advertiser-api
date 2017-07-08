@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,6 +41,18 @@ public class AdvertiserController {
 			throw new NotFoundException("advertiser with id " + id + " was not found");
 		}
 		return advertiser;
+	}
+	
+	@RequestMapping(value="/{id}/hasEnoughCredit", method=RequestMethod.GET)
+	public @ResponseBody Boolean hasEnoughCredit(@PathVariable String id, @RequestParam(value="amount", required=true) int amount) throws NotFoundException {
+		Advertiser advertiser = advertiserService.retrieveAdvertiserById(id);
+		if (advertiser == null) {
+			throw new NotFoundException("advertiser with id " + id + " was not found");
+		}
+		if (advertiser.getCreditLimit().intValue() >= amount) {
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)

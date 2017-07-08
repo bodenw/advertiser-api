@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class AdvertiserControllerTests {
 	
 	private static final String MOCKED_NAME = "MOCKED_NAME";
 	private static final String MOCKED_CONTACT_NAME = "MOCKED_CONTACT_NAME";
-	private static final Integer MOCKED_CREDIT_LIMIT = new Integer(10000);
+	private static final Integer MOCKED_CREDIT_LIMIT = new Integer(100);
 	
 	@Autowired
 	AdvertiserController advertiserController;
@@ -33,13 +34,15 @@ public class AdvertiserControllerTests {
 	@Autowired
 	AdvertiserService advertiserService;
 	
+	// getAllAdvertisers tests
 	@Test
 	public void getAllAdvertisers_shouldReturnRecordsFromDB() {
 		List<Advertiser> advertisers = advertiserController.getAllAdvertisers();
-		assertNotNull(advertisers);
-		assertFalse(advertisers.isEmpty());
+		assertNotNull("advertisers should not be null", advertisers);
+		assertFalse("advertisers should not be empty", advertisers.isEmpty());
 	}
 	
+	// getAdvertiser tests
 	@Test
 	public void getAdvertiser_shouldReturnDataFromDatabase_whenMatchingRecordExists() throws NotFoundException {
 		Advertiser advertiser = advertiserController.getAdvertiserById("12345678-1234-1234-1234-123456789ABC");
@@ -55,6 +58,31 @@ public class AdvertiserControllerTests {
 		advertiserController.getAdvertiserById("11111111-1111-1111-1111-111111111111");
 	}
 	
+	// hasEnoughCredit tests
+	@Test
+	public void hasEnoughCredit_shouldReturnTrue_whenInputIsLessThanCreditLimit() throws NotFoundException {
+		assertTrue("should be true when creditLimit is greater than amount", 
+				advertiserController.hasEnoughCredit("12341234-1234-1234-1234-123412341234", 999));
+	}
+	
+	@Test
+	public void hasEnoughCredit_shouldReturnTrue_whenInputIsEqualToCreditLimit() throws NotFoundException {
+		assertTrue("should be true when creditLimit is equal than amount", 
+				advertiserController.hasEnoughCredit("12341234-1234-1234-1234-123412341234", 1000));
+	}
+	
+	@Test
+	public void hasEnoughCredit_shouldReturnFalse_whenInputIsLessThanCreditLimit() throws NotFoundException {
+		assertFalse("should be false when creditLimit is less than amount",
+				advertiserController.hasEnoughCredit("12345678-1234-1234-1234-123456789ABC", 1001));
+	}
+	
+	@Test(expected=NotFoundException.class)
+	public void hasEnoughCredit_shouldThrowNotFoundException_whenTryingToAccessRecordThatDoesNotExist() throws NotFoundException {
+		assertFalse(advertiserController.hasEnoughCredit("fake_id", 1));
+	}
+	
+	// createAdvertiser tests
 	@Test
 	public void createAdvertiser_shouldSuccessfullyCreateAdvertiser() throws NotFoundException {
 		Advertiser advertiser = mockAdvertiser();
@@ -71,6 +99,7 @@ public class AdvertiserControllerTests {
 		assertEquals("advertiser credit limit should match", MOCKED_CREDIT_LIMIT, advertiserFromDB.getCreditLimit());
 	}
 	
+	// updateAdvertiser tests
 	@Test 
 	public void updateAdvertiser_shouldSuccessfullyUpdateAdvertiser() throws NotFoundException {
 		// Make sure data is initially different
@@ -93,6 +122,7 @@ public class AdvertiserControllerTests {
 		advertiserController.updateAdvertiser("fake_id", mockAdvertiser());
 	}
 	
+	// deleteAdvertiser tests
 	@Test
 	public void deleteAdvertiser_shouldSuccessfullyDeleteAdvertiser() throws NotFoundException {
 		// create record to delete
@@ -113,6 +143,7 @@ public class AdvertiserControllerTests {
 		advertiserController.deleteAdvertiser("fake_id");
 	}
 	
+	// helper methods
 	private Advertiser mockAdvertiser() {
 		Advertiser mock = new Advertiser();
 		mock.setName(MOCKED_NAME);
