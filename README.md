@@ -12,8 +12,9 @@ Perform the following steps to begin developing in project.
 Perform the following steps to run the jacoco tests. It is important to run the test cases and make sure they all pass before pushing code in order to keep the git repository clean.
 
 1. Run `gradlew test jacocoTestReport`
-1. Open the file build\reports\jacoco\test\html\index.html to view the test report.
-1. Make sure all test pass.
+1. Open the file build\reports\tests\test\index.html
+1. Make sure all tests pass.
+1. Open the file build\reports\jacoco\test\html\index.html to view the code coverage report.
 1. Make sure code coverage is complete for newly added functionality.
 
 ## Run the build local
