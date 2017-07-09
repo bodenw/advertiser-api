@@ -63,7 +63,7 @@ public class AdvertiserController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Advertiser createAdvertiser(@RequestBody @Valid Advertiser advertiser) {
 		Advertiser result = advertiserService.createAdvertiser(advertiser);
 		return result;

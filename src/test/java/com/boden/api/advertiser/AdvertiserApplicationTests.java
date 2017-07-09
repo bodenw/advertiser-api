@@ -1,6 +1,7 @@
 package com.boden.api.advertiser;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +27,7 @@ public class AdvertiserApplicationTests {
 	
 	
 	@Test
-	public void restEndpointForGetAllAdvertisers_shouldReturn200n() {
+	public void restEndpointForGetAllAdvertisers_shouldReturn200() {
 		String url = "/api/advertisers";
 		ResponseEntity<Advertiser[]> response = restTemplate.getForEntity(url, Advertiser[].class);
 		
@@ -50,7 +51,22 @@ public class AdvertiserApplicationTests {
 	}
 	
 	@Test
-	public void restEndpointForGetById_shouldReturn400_whenBadDataIsPosted() {
+	public void restEndpointCreateAdvertiser_shouldReturn200_whenGoodDataIsPosted() {
+		String url = "/api/advertisers";
+		
+		Advertiser advertiser = new Advertiser();
+		advertiser.setName("shortname");
+		advertiser.setContactName("testing");
+		advertiser.setCreditLimit(100);
+		
+		ResponseEntity<Advertiser> response = restTemplate.postForEntity(url, advertiser, Advertiser.class);
+		
+		assertEquals("response code should be 200", HttpStatus.OK, response.getStatusCode());
+		assertNotNull("response should included entity with generated id", response.getBody().getId());
+	}
+	
+	@Test
+	public void restEndpointCreateAdvertiser_shouldReturn400_whenBadDataIsPosted() {
 		String url = "/api/advertisers";
 		
 		Advertiser advertiser = new Advertiser();
@@ -63,4 +79,5 @@ public class AdvertiserApplicationTests {
 		assertEquals("response code should be 400", HttpStatus.BAD_REQUEST, response.getStatusCode());
 		
 	}
+	
 }
