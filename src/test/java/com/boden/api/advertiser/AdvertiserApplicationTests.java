@@ -2,8 +2,6 @@ package com.boden.api.advertiser;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +58,7 @@ public class AdvertiserApplicationTests {
 		advertiser.setContactName("testing");
 		advertiser.setCreditLimit(100);
 		
-		ResponseEntity<Advertiser> response = restTemplate.postForEntity(url, advertiser, Advertiser.class);
+		ResponseEntity<String[]> response = restTemplate.postForEntity(url, advertiser, String[].class);
 		
 		assertEquals("response code should be 400", HttpStatus.BAD_REQUEST, response.getStatusCode());
 		
