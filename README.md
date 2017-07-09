@@ -1,4 +1,4 @@
-# Advertiser RESTfil API
+# Advertiser RESTful API
 RESTful apis for advertiser
 
 ## Installation
