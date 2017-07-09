@@ -1,5 +1,5 @@
 # Advertiser RESTful API
-RESTful apis for advertiser
+RESTful apis for advertiser, integrated with swagger for API documentation and actuator for application diagnostics
 
 ## Installation
 Perform the following steps to begin developing in project.
